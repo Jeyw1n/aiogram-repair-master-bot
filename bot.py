@@ -20,10 +20,11 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 async def main() -> None:
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
-    dp = Dispatcher(storage=MemoryStorage)
+    dp = Dispatcher(storage=MemoryStorage())
 
     dp.include_routers(start_router,)
 
+    print('Bot started!')
     await dp.start_polling(bot)
 
 
