@@ -1,18 +1,28 @@
+import os
+from dotenv import load_dotenv 
+
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 import asyncio
 
+from handlers import (
+    start_router
+)
 
-API_TOKEN = ''
+
+# Загружаем переменные из .env файла
+load_dotenv()
+
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 
 async def main() -> None:
-    bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
+    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
     dp = Dispatcher(storage=MemoryStorage)
 
-    dp.include_routers()
+    dp.include_routers(start_router,)
 
     await dp.start_polling(bot)
 
