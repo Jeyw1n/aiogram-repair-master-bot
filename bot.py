@@ -8,11 +8,12 @@ from aiogram.fsm.storage.memory import MemoryStorage
 import asyncio
 
 from handlers import (
-    start_router
+    start_router,
+    issue_descr_router
 )
 
 
-# Загружаем переменные из .env файла
+# Loading a variables from the .env file
 load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -22,7 +23,10 @@ async def main() -> None:
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
     dp = Dispatcher(storage=MemoryStorage())
 
-    dp.include_routers(start_router,)
+    dp.include_routers(
+        start_router,
+        issue_descr_router
+    )
 
     print('Bot started!')
     await dp.start_polling(bot)
