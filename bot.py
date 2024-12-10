@@ -9,7 +9,7 @@ import asyncio
 
 from handlers import (
     start_router,
-    issue_descr_router
+    issue_feedback_router
 )
 
 
@@ -25,7 +25,7 @@ async def main() -> None:
 
     dp.include_routers(
         start_router,
-        issue_descr_router
+        issue_feedback_router
     )
 
     print('Bot started!')
