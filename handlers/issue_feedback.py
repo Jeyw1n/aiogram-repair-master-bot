@@ -36,6 +36,12 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
 @issue_feedback_router.callback_query(F.data.in_(CALLS))
 async def get_device_name(callback_query: CallbackQuery, state: FSMContext) -> None:
     """Button click handler from the device list inline keyboard"""
+
+    # Adding device_type from the callback data
+    await state.update_data(device_type=callback_query.data)
+    
+    await callback_query.answer()
+    
     await state.set_state(Form.device_name)
     await callback_query.message.answer(
         'Напишите название устройства, которое требует ремонта:',
@@ -55,4 +61,26 @@ async def get_description(message: Message, state: FSMContext) -> None:
     await state.set_state(Form.description)
     await message.answer(
         'Опишите проблему с вашим устройством:'
+    )
+
+
+DEVICES_TEXTS = {
+    'phone': 'Телефон',
+    'laptop': 'Ноутбук',
+    'computer': 'Компютер',
+    'vape': 'Вейп',
+    'other': 'Другое'
+}
+
+
+@issue_feedback_router.message(Form.description)
+async def final_state(message: Message, state: FSMContext) -> None:
+    data = await state.update_data(description=message.text)
+    await state.clear()
+
+    await message.answer(
+        f'*Тип устройства:* {DEVICES_TEXTS[data["device_type"]]}\n' \
+        f'*Название:* {data["device_name"]}\n' \
+        f'*Описание:* {data['description']}\n\n' \
+        'Ваша заявка успешно отправлена на рассмотрение. Пожалуйста, ожидайте!'
     )
