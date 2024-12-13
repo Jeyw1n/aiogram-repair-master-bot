@@ -21,9 +21,16 @@ import config
 load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
+if not BOT_TOKEN:
+    raise ValueError("BOT_TOKEN is not set in the environment variables.")
+
+# Initialize bot and dispatcher
+bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
+dp = Dispatcher(storage=MemoryStorage())
 
 
 def create_db() -> None:
+    """Create database and tables if they do not exist."""
     db_conn = create_connection(config.DATABASE_NAME)
     if db_conn is not None:
         create_tables(db_conn)
@@ -34,9 +41,6 @@ def create_db() -> None:
 
 async def main() -> None:
     create_db()
-
-    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
-    dp = Dispatcher(storage=MemoryStorage())
 
     dp.include_routers(
         start_router,
@@ -50,4 +54,7 @@ async def main() -> None:
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except Exception as e:
+        print(f"An error occurred: {e}")
