@@ -10,7 +10,8 @@ import asyncio
 from database.models import create_connection, create_tables
 from handlers import (
     start_router,
-    issue_feedback_router
+    issue_feedback_router,
+    new_order_router
 )
 
 
@@ -32,13 +33,14 @@ def create_db() -> None:
 
 async def main() -> None:
     create_db()
-    
+
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
     dp = Dispatcher(storage=MemoryStorage())
 
     dp.include_routers(
         start_router,
-        issue_feedback_router
+        issue_feedback_router,
+        new_order_router
     )
 
     print('Bot started!')
