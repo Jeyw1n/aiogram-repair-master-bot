@@ -6,6 +6,7 @@ __pycache__/
 .Python
 env/
 venv/
+.venv/
 ENV/
 env.bak/
 venv.bak/
@@ -20,6 +21,7 @@ build/
 config.ini
 config.yaml
 *.env
+db.sqlite3
 
 # Системные файлы
 .DS_Store
