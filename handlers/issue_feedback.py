@@ -8,7 +8,8 @@ from markups import (
     cancel_markup,
     main_menu_markup
 )
-from database.models import create_connection, add_order, Order
+from database import create_connection, add_order
+from database.models import Order
 import config
 
 issue_feedback_router = Router(name=__name__)

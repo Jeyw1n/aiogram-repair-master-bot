@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 
-from database.models import get_orders_by_user_id, create_connection
+from database import get_orders_by_user_id, create_connection
 import config
 
 get_orders_router = Router(name=__name__)

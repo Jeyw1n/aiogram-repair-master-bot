@@ -7,7 +7,7 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 import asyncio
 
-from database.models import create_connection, create_tables
+from database import create_connection, create_tables
 from handlers import (
     start_router,
     issue_feedback_router,
