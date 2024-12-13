@@ -9,12 +9,11 @@ from markups import (
     main_menu_markup
 )
 from database.models import create_connection, add_order, Order
-
+import config
 
 issue_feedback_router = Router(name=__name__)
 
 CALLS = {'phone', 'laptop', 'computer', 'vape', 'other'}
-DATABASE_NAME = "db.sqlite3"
 
 
 class Form(StatesGroup):
@@ -86,7 +85,7 @@ DEVICES_TEXTS = {
 
 def save_order_to_database(data: dict, user_id: int) -> None:
     try:
-        conn = create_connection(DATABASE_NAME)
+        conn = create_connection(config.DATABASE_NAME)
         
         device_type = DEVICES_TEXTS[data['device_type']]
         device_name = data['device_name']

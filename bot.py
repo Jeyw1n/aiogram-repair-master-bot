@@ -11,19 +11,20 @@ from database.models import create_connection, create_tables
 from handlers import (
     start_router,
     issue_feedback_router,
-    new_order_router
+    new_order_router,
+    get_orders_router
 )
+import config
 
 
 # Loading a variables from the .env file
 load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-DATABASE_NAME = "db.sqlite3"
 
 
 def create_db() -> None:
-    db_conn = create_connection(DATABASE_NAME)
+    db_conn = create_connection(config.DATABASE_NAME)
     if db_conn is not None:
         create_tables(db_conn)
         db_conn.close()
@@ -40,7 +41,8 @@ async def main() -> None:
     dp.include_routers(
         start_router,
         issue_feedback_router,
-        new_order_router
+        new_order_router,
+        get_orders_router
     )
 
     print('Bot started!')
