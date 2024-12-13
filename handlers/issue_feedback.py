@@ -4,7 +4,10 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import Command
 
-from markups import cancel_markup
+from markups import (
+    cancel_markup,
+    main_menu_markup
+)
 from database.models import create_connection, add_order, Order
 
 
@@ -31,7 +34,7 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
     await state.clear()
     await message.answer(
         'Действие отменено.',
-        reply_markup=ReplyKeyboardRemove()
+        reply_markup=main_menu_markup()
     )
 
 
@@ -42,12 +45,17 @@ async def get_device_name(callback_query: CallbackQuery, state: FSMContext) -> N
     # Adding device_type from the callback data
     await state.update_data(device_type=callback_query.data)
     
+    await callback_query.message.edit_text(
+        '*Принято!*\n' \
+        'Пожалуйста, заполните форму:',
+        reply_markup=None
+    )
     await callback_query.answer()
     
     await state.set_state(Form.device_name)
     await callback_query.message.answer(
         'Напишите название устройства, которое требует ремонта:',
-        reply_markup=cancel_markup(),
+        reply_markup=cancel_markup()
     )
 
 
@@ -62,7 +70,8 @@ async def get_description(message: Message, state: FSMContext) -> None:
     # Setting a new state for the description
     await state.set_state(Form.description)
     await message.answer(
-        'Опишите проблему с вашим устройством:'
+        'Опишите проблему с вашим устройством:',
+        reply_markup=cancel_markup()
     )
 
 
@@ -102,5 +111,6 @@ async def final_state(message: Message, state: FSMContext) -> None:
         f'*Тип устройства:* {DEVICES_TEXTS[data["device_type"]]}\n' \
         f'*Название:* {data["device_name"]}\n' \
         f'*Описание:* {data['description']}\n\n' \
-        'Ваша заявка успешно отправлена на рассмотрение. Пожалуйста, ожидайте!'
+        'Ваша заявка успешно отправлена на рассмотрение. Пожалуйста, ожидайте!',
+        reply_markup=main_menu_markup()
     )
