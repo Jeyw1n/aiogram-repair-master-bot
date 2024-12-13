@@ -12,7 +12,8 @@ from handlers import (
     start_router,
     issue_feedback_router,
     new_order_router,
-    get_orders_router
+    get_orders_router,
+    admin_router
 )
 import config
 
@@ -46,7 +47,8 @@ async def main() -> None:
         start_router,
         issue_feedback_router,
         new_order_router,
-        get_orders_router
+        get_orders_router,
+        admin_router
     )
 
     print('Bot started!')
