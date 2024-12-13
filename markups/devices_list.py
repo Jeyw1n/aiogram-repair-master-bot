@@ -1,6 +1,4 @@
 from aiogram.types import (
-    ReplyKeyboardMarkup,
-    KeyboardButton,
     InlineKeyboardMarkup,
     InlineKeyboardButton
 )
@@ -15,7 +13,7 @@ DEVICES = {
 
 
 def devices_list_markup() -> InlineKeyboardMarkup:
-    """ Returns inline keyboard with devices list """
+    """Returns inline keyboard with devices list"""
     buttons = []
     current_row = []
     row_length = 2
