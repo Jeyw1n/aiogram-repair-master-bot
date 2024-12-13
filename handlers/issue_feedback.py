@@ -5,11 +5,13 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import Command
 
 from markups import cancel_markup
+from database.models import create_connection, add_order, Order
 
 
 issue_feedback_router = Router(name=__name__)
 
 CALLS = {'phone', 'laptop', 'computer', 'vape', 'other'}
+DATABASE_NAME = "db.sqlite3"
 
 
 class Form(StatesGroup):
@@ -73,10 +75,28 @@ DEVICES_TEXTS = {
 }
 
 
+def save_order_to_database(data: dict, user_id: int) -> None:
+    try:
+        conn = create_connection(DATABASE_NAME)
+        
+        device_type = DEVICES_TEXTS[data['device_type']]
+        device_name = data['device_name']
+        description = data['description']
+
+        order = Order(user_id, device_type, device_name, description)
+        add_order(conn=conn, order=order)
+        conn.close()
+    
+    except Exception as ex:
+        print(f'Error when adding an order: {ex}')
+
+
 @issue_feedback_router.message(Form.description)
 async def final_state(message: Message, state: FSMContext) -> None:
     data = await state.update_data(description=message.text)
     await state.clear()
+
+    save_order_to_database(data=data, user_id=message.from_user.id)
 
     await message.answer(
         f'*Тип устройства:* {DEVICES_TEXTS[data["device_type"]]}\n' \
