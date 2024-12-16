@@ -7,9 +7,15 @@ import config
 
 get_orders_router = Router(name=__name__)
 
+STATUS_CODES = {
+    0: 'На рассмотрении',
+    1: 'Выполнен',
+    2: 'Отказ'
+}
+        
 
 @get_orders_router.message(F.text == 'Список заказов 🗂️')
-async def new_order_button_handler(message: Message):
+async def get_orders_button_handler(message: Message):
     """Handler to display a user's orders"""
 
     user_id = message.from_user.id  # Extract user ID
@@ -30,7 +36,7 @@ async def new_order_button_handler(message: Message):
         conn.close()
     
     except Exception as ex:
-        print(f'Error when adding an order: {ex}')
+        print(f'Error when getting all orders: {ex}')
 
     # Build the formatted output string
     for i, order in enumerate(orders, start=1):
@@ -38,6 +44,7 @@ async def new_order_button_handler(message: Message):
         output_text += f'<b>Тип устройства:</b> {order.device_type}\n'
         output_text += f'<b>Название:</b> {order.device_name}\n'
         output_text += f'<b>Описание:</b> {order.description}\n'
+        output_text += f'<b>Статус:</b> {STATUS_CODES[order.status]}\n'
         output_text += f'<i>Дата создания: {order.created_at}</i>'
 
         await message.answer(output_text, parse_mode=ParseMode.HTML)
