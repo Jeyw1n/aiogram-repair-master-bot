@@ -11,6 +11,7 @@ def create_tables(conn) -> None:
             device_type TEXT NOT NULL,
             device_name TEXT NOT NULL,
             description TEXT NOT NULL,
+            status INTEGER NOT NULL,
             created_at TEXT NOT NULL
         )
     """)
@@ -20,9 +21,9 @@ def create_tables(conn) -> None:
 def add_order(conn, order) -> None:
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO orders (user_id, device_type, device_name, description, created_at)
-        VALUES (?, ?, ?, ?, ?)
-    """, (order.user_id, order.device_type, order.device_name, order.description, order.created_at))
+        INSERT INTO orders (user_id, device_type, device_name, description, status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (order.user_id, order.device_type, order.device_name, order.description, order.status, order.created_at))
     conn.commit()
 
 
@@ -32,7 +33,7 @@ def get_orders_by_user_id(conn, user_id) -> list[Order]:
     rows = cursor.fetchall()
     orders = []
     for row in rows:
-        orders.append(Order(row[1], row[2], row[3], row[4], row[5]))
+        orders.append(Order(row[1], row[2], row[3], row[4], row[5], row[6]))
     return orders
 
 
@@ -42,7 +43,7 @@ def get_all_orders(conn) -> list[Order]:
     rows = cursor.fetchall()
     orders = []
     for row in rows:
-        orders.append(Order(row[1], row[2], row[3], row[4], row[5]))
+        orders.append(Order(row[1], row[2], row[3], row[4], row[5], row[6]))
     return orders
 
 
