@@ -12,7 +12,7 @@ STATUS_CODES = {
     1: 'Выполнен',
     2: 'Отказ'
 }
-        
+
 
 @get_orders_router.message(F.text == 'Список заказов 🗂️')
 async def get_orders_button_handler(message: Message):
