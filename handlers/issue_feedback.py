@@ -105,6 +105,18 @@ async def final_state(message: Message, state: FSMContext) -> None:
     data = await state.update_data(description=message.text)
     await state.clear()
 
+    description = data['description']
+    device_name = data['device_name']
+
+    # Check for exceeding the total number of characters
+    if len(device_name) + len(description) > 1000:
+        await message.answer(
+            'Слишком много символов в названии или описании устройства. '
+            'Общее количество символов не должно превышать 1000.',
+            reply_markup=main_menu_markup()
+        )
+        return  # Exit the function if exceeded
+    
     save_order_to_database(data=data, user_id=message.from_user.id)
 
     await message.answer(
