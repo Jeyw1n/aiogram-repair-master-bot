@@ -1,6 +1,3 @@
-import os
-from dotenv import load_dotenv 
-
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -18,15 +15,8 @@ from handlers import (
 import config
 
 
-# Loading a variables from the .env file
-load_dotenv()
-
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN is not set in the environment variables.")
-
 # Initialize bot and dispatcher
-bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
+bot = Bot(token=config.BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
 dp = Dispatcher(storage=MemoryStorage())
 
 
