@@ -31,6 +31,7 @@ async def generate_page_with_orders(orders_to_display: list) -> str:
         username = await get_username(user_id=user_id)
 
         output_lines.append(
+            f'<b>ID: {order.order_id}</b>\n'
             f'<b>Пользователь: {username}</b>\n'
             f'<b>Тип устройства:</b> {order.device_type}\n'
             f'<b>Название:</b> {order.device_name}\n'
