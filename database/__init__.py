@@ -5,3 +5,4 @@ from .operations import (
     get_all_orders,
     create_connection
 )
+from .database import Database
