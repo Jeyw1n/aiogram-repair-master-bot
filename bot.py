@@ -4,13 +4,14 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 import asyncio
 
-from database import create_connection, create_tables
+from database import Database
 from handlers import (
     start_router,
     issue_feedback_router,
     new_order_router,
     get_orders_router,
-    admin_router
+    admin_router,
+    update_status_router
 )
 import config
 
@@ -22,12 +23,9 @@ dp = Dispatcher(storage=MemoryStorage())
 
 def create_db() -> None:
     """Create database and tables if they do not exist."""
-    db_conn = create_connection(config.DATABASE_NAME)
-    if db_conn is not None:
-        create_tables(db_conn)
-        db_conn.close()
-    else:
-        print("Error! cannot create the database connection.")
+    conn = Database()
+    conn.create_tables()
+    conn.close()
 
 
 async def main() -> None:
@@ -38,7 +36,8 @@ async def main() -> None:
         issue_feedback_router,
         new_order_router,
         get_orders_router,
-        admin_router
+        admin_router,
+        update_status_router
     )
 
     print('Bot started!')

@@ -3,9 +3,8 @@ from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery
 from aiogram.enums import ParseMode
 
-from database import create_connection, get_all_orders
+from database import Database
 from markups import paginator_markup
-import config
 
 admin_router = Router(name=__name__)
 
@@ -43,8 +42,8 @@ async def generate_page_with_orders(orders_to_display: list) -> str:
 
 async def fetch_orders(page: int) -> tuple[list, int]:
     """Fetch orders and return them along with total count."""
-    conn = create_connection(config.DATABASE_NAME)
-    orders = get_all_orders(conn=conn)
+    conn = Database()
+    orders = conn.get_orders()
     conn.close()
     return orders, len(orders)
 

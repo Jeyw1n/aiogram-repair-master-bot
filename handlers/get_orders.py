@@ -2,8 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.enums import ParseMode
 
-from database import get_orders_by_user_id, create_connection
-import config
+from database import Database
 
 get_orders_router = Router(name=__name__)
 
@@ -21,9 +20,9 @@ async def get_orders_button_handler(message: Message):
     user_id = message.from_user.id  # Extract user ID
 
     try:
-        conn = create_connection(config.DATABASE_NAME)
+        conn = Database()
     
-        orders = get_orders_by_user_id(conn=conn, user_id=user_id)  # Fetch user's orders
+        orders = conn.get_orders(user_id=user_id)  # Fetch user's orders
              
         if not orders:
             await message.answer(

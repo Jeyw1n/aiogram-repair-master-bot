@@ -8,9 +8,8 @@ from markups import (
     cancel_markup,
     main_menu_markup
 )
-from database import create_connection, add_order
+from database import Database
 from database.models import Order
-import config
 
 issue_feedback_router = Router(name=__name__)
 
@@ -86,14 +85,14 @@ DEVICES_TEXTS = {
 
 def save_order_to_database(data: dict, user_id: int) -> None:
     try:
-        conn = create_connection(config.DATABASE_NAME)
+        conn = Database()
         
         device_type = DEVICES_TEXTS[data['device_type']]
         device_name = data['device_name']
         description = data['description']
 
         order = Order(user_id, device_type, device_name, description)
-        add_order(conn=conn, order=order)
+        conn.add_order(order)
         conn.close()
     
     except Exception as ex:
