@@ -1,7 +1,9 @@
 import os
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
 
 DATABASE_NAME = 'db.sqlite3'
+
+load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 if not BOT_TOKEN:
